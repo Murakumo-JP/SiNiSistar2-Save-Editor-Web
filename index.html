@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -179,7 +179,7 @@
 					</div>
 
 					<div class="panel">
-						<h3 style="margin-top: 0; color: #f9e2af">Abnormals</h3>
+						<h3 style="margin-top: 0; color: #f9e2af">Status</h3>
 
 						<div class="status-list" id="abnormalsList"></div>
 
@@ -206,7 +206,7 @@
 		<script>
 			let rawLines = [];
 			let saveData = null;
-			let originalFileName = "File04";
+			let originalFileName = "File01";
 
 			function base64ToBytes(base64) {
 				const binString = atob(base64);
@@ -241,7 +241,7 @@
 
 						updateUI();
 					} catch (err) {
-						alert("Ошибка чтения файла сохранения!\n" + err.message);
+						alert("Error reading the save file!\n" + err.message);
 						console.error(err);
 					}
 				};
@@ -271,14 +271,14 @@
 				const abnormals = saveData.m_StatusSetting.m_AbnormalSaveDataArray || [];
 
 				if (abnormals.length === 0) {
-					container.innerHTML = '<span style="color:#6c7086;">Нет активных статусов</span>';
+					container.innerHTML = '<span style="color:#6c7086;">There are no active statuses</span>';
 				}
 
 				abnormals.forEach((abnormal, index) => {
 					const div = document.createElement("div");
 					div.className = "status-item";
 					div.innerHTML = `
-                <span>ID: <b style="color:#89b4fa">${abnormal.m_Type}</b> | Уровень: <b>${abnormal.m_Level}</b></span>
+                <span>ID: <b style="color:#89b4fa">${abnormal.m_Type}</b> | Level: <b>${abnormal.m_Level}</b></span>
                 <button class="btn-danger" onclick="removeAbnormal(${index})">X</button>
             `;
 					container.appendChild(div);
