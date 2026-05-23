@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SiNiSistar 2 Save Editor (v1.3.1)</title>
+		<style>
+			body {
+				font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+				background-color: #1e1e2e;
+				color: #cdd6f4;
+				margin: 0;
+				padding: 20px;
+				display: flex;
+				justify-content: center;
+			}
+			.container {
+				max-width: 900px;
+				width: 100%;
+			}
+			h1 {
+				color: #89b4fa;
+				text-align: center;
+			}
+			.panel {
+				background-color: #313244;
+				padding: 20px;
+				border-radius: 8px;
+				margin-bottom: 20px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+				border: 2px solid #89b4fa;
+			}
+			.grid-2 {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 20px;
+			}
+			.form-group {
+				display: flex;
+				flex-direction: column;
+				margin-bottom: 12px;
+			}
+			label {
+				margin-bottom: 5px;
+				font-size: 0.9em;
+				color: #bac2de;
+				font-weight: bold;
+			}
+			input,
+			select {
+				padding: 8px;
+				border: 1px solid #45475a;
+				border-radius: 4px;
+				background-color: #181825;
+				color: #cdd6f4;
+			}
+			button {
+				background-color: #89b4fa;
+				color: #11111b;
+				border: none;
+				padding: 10px 15px;
+				border-radius: 4px;
+				cursor: pointer;
+				font-weight: bold;
+				transition: 0.2s;
+			}
+			button:hover {
+				background-color: #b4befe;
+			}
+			button:disabled {
+				background-color: #45475a;
+				cursor: not-allowed;
+			}
+			.btn-danger {
+				background-color: #f38ba8;
+				padding: 5px 10px;
+			}
+			.btn-danger:hover {
+				background-color: #eba0ac;
+			}
+
+			#editor-section {
+				display: none;
+			}
+			.status-list {
+				background-color: #181825;
+				padding: 10px;
+				border-radius: 4px;
+				max-height: 250px;
+				overflow-y: auto;
+			}
+			.status-item {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 8px;
+				border-bottom: 1px solid #313244;
+			}
+			.status-item:last-child {
+				border-bottom: none;
+			}
+			.add-status-box {
+				display: flex;
+				gap: 10px;
+				margin-top: 15px;
+				align-items: flex-end;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>SiNiSistar 2 Save Editor (Game v1.3.1)</h1>
+
+			<div class="panel" id="upload-section">
+				<label>Select File</label>
+				<input type="file" id="fileInput" style="margin-top: 10px" />
+			</div>
+
+			<div id="editor-section">
+				<div class="grid-2">
+					<div class="panel">
+						<h3 style="margin-top: 0; color: #a6e3a1">Character Characteristics</h3>
+
+						<div class="form-group">
+							<label>Player Name</label>
+							<input type="text" id="m_PlayerName" />
+						</div>
+						<div class="form-group">
+							<label>Relics</label>
+							<input type="number" id="m_Relics" />
+						</div>
+						<div class="grid-2">
+							<div class="form-group">
+								<label>HP</label>
+								<input type="number" id="m_CurrentHP" />
+							</div>
+							<div class="form-group">
+								<label>MP</label>
+								<input type="number" id="m_CurrentMP" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label>Durability</label>
+							<input type="number" id="m_CurrentDurability" />
+						</div>
+
+						<div class="grid-2">
+							<div class="form-group">
+								<label>AttackLv</label>
+								<select id="m_AttackLv">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label>HpLv</label>
+								<select id="m_HpLv">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label>MpLv</label>
+								<select id="m_MpLv">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="panel">
+						<h3 style="margin-top: 0; color: #f9e2af">Abnormals</h3>
+
+						<div class="status-list" id="abnormalsList"></div>
+
+						<div class="add-status-box">
+							<div class="form-group" style="flex: 1">
+								<label>ID Status</label>
+								<input type="number" id="newAbnormalType" placeholder="ID" />
+							</div>
+							<div class="form-group" style="width: 80px">
+								<label>Level</label>
+								<input type="number" id="newAbnormalLevel" value="1" min="1" />
+							</div>
+							<button onclick="addAbnormal()" style="margin-bottom: 12px; background-color: #a6e3a1">Add</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="panel" style="text-align: center; border-color: #a6e3a1">
+					<button onclick="saveFile()" style="font-size: 1.1em; padding: 15px 40px; background-color: #a6e3a1">💾 Save</button>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			let rawLines = [];
+			let saveData = null;
+			let originalFileName = "File04";
+
+			function base64ToBytes(base64) {
+				const binString = atob(base64);
+				return Uint8Array.from(binString, (m) => m.codePointAt(0));
+			}
+
+			function bytesToBase64(bytes) {
+				let binary = "";
+				for (let i = 0; i < bytes.byteLength; i++) {
+					binary += String.fromCharCode(bytes[i]);
+				}
+				return btoa(binary);
+			}
+
+			document.getElementById("fileInput").addEventListener("change", function (e) {
+				const file = e.target.files[0];
+				if (!file) return;
+				originalFileName = file.name;
+
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					const content = e.target.result;
+					const cleanContent = content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
+					rawLines = cleanContent.split(/\r?\n/);
+					const base64Data = rawLines[0];
+
+					try {
+						const bytes = base64ToBytes(base64Data);
+						const decodedStr = new TextDecoder("gb18030").decode(bytes);
+						const reversedStr = Array.from(decodedStr).reverse().join("");
+						saveData = JSON.parse(reversedStr);
+
+						updateUI();
+					} catch (err) {
+						alert("Ошибка чтения файла сохранения!\n" + err.message);
+						console.error(err);
+					}
+				};
+				reader.readAsText(file);
+			});
+
+			function updateUI() {
+				const stats = saveData.m_StatusSetting;
+
+				document.getElementById("m_PlayerName").value = stats.m_PlayerName;
+				document.getElementById("m_Relics").value = stats.m_Relics;
+				document.getElementById("m_CurrentHP").value = stats.m_CurrentHP;
+				document.getElementById("m_CurrentMP").value = stats.m_CurrentMP;
+				document.getElementById("m_CurrentDurability").value = stats.m_CurrentDurability;
+				document.getElementById("m_AttackLv").value = stats.m_AttackLv;
+				document.getElementById("m_HpLv").value = stats.m_HpLv;
+				document.getElementById("m_MpLv").value = stats.m_MpLv;
+
+				renderAbnormals();
+				document.getElementById("editor-section").style.display = "block";
+			}
+
+			function renderAbnormals() {
+				const container = document.getElementById("abnormalsList");
+				container.innerHTML = "";
+
+				const abnormals = saveData.m_StatusSetting.m_AbnormalSaveDataArray || [];
+
+				if (abnormals.length === 0) {
+					container.innerHTML = '<span style="color:#6c7086;">Нет активных статусов</span>';
+				}
+
+				abnormals.forEach((abnormal, index) => {
+					const div = document.createElement("div");
+					div.className = "status-item";
+					div.innerHTML = `
+                <span>ID: <b style="color:#89b4fa">${abnormal.m_Type}</b> | Уровень: <b>${abnormal.m_Level}</b></span>
+                <button class="btn-danger" onclick="removeAbnormal(${index})">X</button>
+            `;
+					container.appendChild(div);
+				});
+			}
+
+			function removeAbnormal(index) {
+				saveData.m_StatusSetting.m_AbnormalSaveDataArray.splice(index, 1);
+				renderAbnormals();
+			}
+
+			function addAbnormal() {
+				const typeInput = document.getElementById("newAbnormalType");
+				const levelInput = document.getElementById("newAbnormalLevel");
+
+				const type = parseInt(typeInput.value);
+				const level = parseInt(levelInput.value);
+
+				if (isNaN(type) || isNaN(level)) return alert("Введите корректные числа!");
+
+				const abnormals = saveData.m_StatusSetting.m_AbnormalSaveDataArray;
+				const existingIndex = abnormals.findIndex((a) => a.m_Type === type);
+
+				if (existingIndex !== -1) {
+					abnormals[existingIndex].m_Level = level;
+				} else {
+					abnormals.push({m_Type: type, m_Level: level});
+				}
+
+				typeInput.value = "";
+				renderAbnormals();
+			}
+
+			function saveFile() {
+				const stats = saveData.m_StatusSetting;
+				stats.m_PlayerName = document.getElementById("m_PlayerName").value;
+				stats.m_Relics = parseInt(document.getElementById("m_Relics").value);
+				stats.m_CurrentHP = parseInt(document.getElementById("m_CurrentHP").value);
+				stats.m_CurrentMP = parseInt(document.getElementById("m_CurrentMP").value);
+				stats.m_CurrentDurability = parseInt(document.getElementById("m_CurrentDurability").value);
+				stats.m_AttackLv = parseInt(document.getElementById("m_AttackLv").value);
+				stats.m_HpLv = parseInt(document.getElementById("m_HpLv").value);
+				stats.m_MpLv = parseInt(document.getElementById("m_MpLv").value);
+
+				const jsonStr = JSON.stringify(saveData);
+				const reversedStr = Array.from(jsonStr).reverse().join("");
+				const bytes = new TextEncoder().encode(reversedStr);
+				const base64Data = bytesToBase64(bytes);
+
+				rawLines[0] = base64Data;
+				const finalContent = rawLines.join("\n");
+
+				const blob = new Blob(["\uFEFF" + finalContent], {type: "application/octet-stream"});
+
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement("a");
+				a.href = url;
+				a.download = originalFileName;
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
+				URL.revokeObjectURL(url);
+			}
+		</script>
+	</body>
+</html>
